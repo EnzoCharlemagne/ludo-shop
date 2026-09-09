@@ -16,6 +16,8 @@
         <ini name="memory_limit" value="512M" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
+        <server name="KERNEL_CLASS" value="App\Kernel" />
+        <env name="APP_ENV" value="test" force="true" />
     </php>
 
     <testsuites>
