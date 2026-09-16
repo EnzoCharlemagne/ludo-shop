@@ -55,6 +55,8 @@ class LoginTest extends FunctionalTestCase
             '_csrf_token' => $csrfToken,
         ]);
         $this->assertResponseRedirects();
+
+        $this->client->request('GET', '/logout');
         $this->client->followRedirect();
         $this->assertRouteSame('app_home');
     }
