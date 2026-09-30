@@ -24,7 +24,9 @@ class CartTest extends FunctionalTestCase
         $this->client->followRedirect();
         $this->assertSelectorTextContains('body', 'Catan');
     }
-    public function testCartQuantityIsUpdated(): void{
+
+    public function testCartQuantityIsUpdated(): void
+    {
         $this->login('client@example.com');
         $user = $this->findUser('client@example.com');
         $product = $this->repository(Product::class)->findOneBy(['reference' => 'CAT-001']);
@@ -34,18 +36,17 @@ class CartTest extends FunctionalTestCase
         $cart = $cartService->getOrCreateCart($user);
         $cartService->addProduct($cart, $product, 2);
 
-        $this->client->request('POST', '/cart/items/' . $product->getId() . '/update',[
-            'quantity' => 3
+        $this->client->request('POST', '/cart/items/'.$product->getId().'/update', [
+            'quantity' => 3,
         ]);
 
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertSelectorTextContains('body', '3');
-
-
-
     }
-    public function testRemoveProductFromCart(): void{
+
+    public function testRemoveProductFromCart(): void
+    {
         $this->login('client@example.com');
         $user = $this->findUser('client@example.com');
         $product = $this->repository(Product::class)->findOneBy(['reference' => 'CAT-001']);
@@ -55,15 +56,13 @@ class CartTest extends FunctionalTestCase
         $cart = $cartService->getOrCreateCart($user);
         $cartService->addProduct($cart, $product, 4);
 
-        $this->client->request('POST', '/cart/items/' . $product->getId() . '/remove');
+        $this->client->request('POST', '/cart/items/'.$product->getId().'/remove');
 
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertSelectorTextContains('body', 'Votre panier est vide');
-
-
-
     }
+
     public function testCartShowsCorrectTotal(): void
     {
         $this->login('client@example.com');
