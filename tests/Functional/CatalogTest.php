@@ -16,7 +16,7 @@ class CatalogTest extends FunctionalTestCase
         $this->assertSelectorTextContains('body', 'Catan');
     }
 
-    public function testFilterByCategory() : void
+    public function testFilterByCategory(): void
     {
         $this->client->request('GET', '/products?category=board-games');
 

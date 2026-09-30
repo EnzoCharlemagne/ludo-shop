@@ -50,12 +50,11 @@ class CheckoutTest extends FunctionalTestCase
 
         $this->client->request('GET', '/checkout');
 
-        $this->assertResponseRedirects("/cart");
+        $this->assertResponseRedirects('/cart');
 
         $this->client->followRedirect();
 
         $this->assertSelectorExists('.alert');
-
     }
 
     public function testConfirmationPageIsDisplayed(): void
@@ -94,7 +93,6 @@ class CheckoutTest extends FunctionalTestCase
         $crawler = $this->client->followRedirect();
 
         $this->assertResponseIsSuccessful();
-
     }
 
     public function testPaymentCreatesPaidOrder(): void

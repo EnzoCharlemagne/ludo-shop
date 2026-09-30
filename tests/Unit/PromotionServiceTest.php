@@ -120,7 +120,6 @@ class PromotionServiceTest extends TestCase
         $this->assertTrue($this->service->isOnPromotion($product, $now));
     }
 
-
     private function createProduct(float $price, ?float $promoPrice = null): Product
     {
         $product = new Product();
