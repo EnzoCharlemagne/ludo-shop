@@ -58,6 +58,45 @@ class CheckoutTest extends FunctionalTestCase
 
     }
 
+    public function testConfirmationPageIsDisplayed(): void
+    {
+        $this->login('client@example.com');
+        $user = $this->findUser('client@example.com');
+
+        $product = $this->repository(Product::class)->findOneBy(['reference' => 'CAT-001']);
+        $cartService = $this->client->getContainer()->get(CartService::class);
+        $cart = $cartService->getOrCreateCart($user);
+        $cartService->addProduct($cart, $product, 1);
+
+        $crawler = $this->client->request('GET', '/checkout');
+        $token = $crawler->filter('input[name="checkout_form[_token]"]')->attr('value');
+
+        $this->client->request('POST', '/checkout', [
+            'checkout_form' => [
+                'addressLine' => '123 Rue Test',
+                'postalCode' => '75001',
+                'city' => 'Paris',
+                'country' => 'FR',
+                '_token' => $token,
+            ],
+        ]);
+
+        $order = $this->repository(Order::class)->findOneBy(['user' => $user]);
+
+        $this->client->request('POST', '/orders/'.$order->getId().'/pay');
+
+        $this->assertResponseRedirects();
+        $this->entityManager()->clear();
+
+        $paidOrder = $this->repository(Order::class)->find($order->getId());
+        $this->assertSame('paid', $paidOrder->getStatus()->value);
+
+        $crawler = $this->client->followRedirect();
+
+        $this->assertResponseIsSuccessful();
+
+    }
+
     public function testPaymentCreatesPaidOrder(): void
     {
         $this->login('client@example.com');
