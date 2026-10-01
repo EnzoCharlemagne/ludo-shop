@@ -96,16 +96,23 @@ class CartServiceTest extends TestCase
         $user = $this->createStub(User::class);
         $cart = new Cart($user);
 
-        $product = new Product();
-        $product->setName('Pikomino');
-        $product->setStock(10);
-        $product->setPrice(50.00);
-        $product->setPromoPrice(35.00);
-        $product->setPromoStartsAt(new \DateTimeImmutable('2026-01-01T00:00:00'));
-        $product->setPromoEndsAt(new \DateTimeImmutable('2099-01-01T00:00:00'));
+        $product = $this->createProductWithPromo(50.00, 35.00);
 
         $this->service->addProduct($cart, $product, 2);
 
         $this->assertSame(70.00, $this->service->getTotal($cart));
+    }
+
+    private function createProductWithPromo(float $price, float $promoPrice): Product
+    {
+        $product = new Product();
+        $product->setName('Pikomino');
+        $product->setPrice($price);
+        $product->setPromoPrice($promoPrice);
+        $product->setPromoStartsAt(new \DateTimeImmutable('2026-01-01T00:00:00'));
+        $product->setPromoEndsAt(new \DateTimeImmutable('2099-01-01T00:00:00'));
+        $product->setStock(10);
+
+        return $product;
     }
 }
