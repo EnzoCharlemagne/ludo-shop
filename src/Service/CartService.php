@@ -44,7 +44,7 @@ class CartService
 
         $item = new CartItem($product);
         $item->setQuantity($quantity);
-        $item->setUnitPrice($this->promotionService->getCurrentPrice($product));
+        $item->setUnitPrice($product->getPrice());
         $cart->addItem($item);
         $cart->touch();
         $this->entityManager->persist($item);
